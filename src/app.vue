@@ -1,25 +1,22 @@
-<template>
-    <div>
-      <nav>
-        <router-link to="/clock">Clock</router-link> <!-- Add a link to the Clock route -->
-      </nav>
-      <router-view></router-view> <!-- This is where the route components will be displayed -->
-    </div>
-  </template>
-  
-  <script>
+<script>
+  import TimeAndDate from './components/TimeAndDate.vue';
+  import Weather from './components/Weather.vue' 
   export default {
     name: 'App',
+    components:{
+      TimeAndDate,
+      Weather,
+    }
   };
   </script>
   
-  <style>
-  nav {
-    margin-bottom: 20px;
-  }
-  
-  router-link {
-    margin-right: 10px;
-  }
-  </style>
-  
+  <template class="bg-red">
+    <div class="text-white w-11/12 mx-auto mt-10">
+
+      <div class="flex flex-row justify-between">
+        <TimeAndDate />
+      <Weather />
+      </div>
+      
+    </div>
+  </template>
