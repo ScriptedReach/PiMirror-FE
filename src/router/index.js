@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Clock from '../components/ClockComponent.vue';
+import TimeAndDate from '../components/TimeAndDate.vue';
 
-const routes = [
+
+const routes = [    
   {
-    path: '/',
-    name: 'Clock',
-    component: Clock
+    path: '/time',
+    name: 'TimeAndDate',
+    component: TimeAndDate
   },
 ];
 
