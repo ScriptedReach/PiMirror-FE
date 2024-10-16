@@ -1,7 +1,9 @@
 <template>
     <div>
       <h1>Clock Page</h1>
-      <p>Welcome to the Clock page!</p>
+      <h1 class="text-3xl bg-red-700 font-bold underline">
+    Hello world!
+  </h1>
     </div>
   </template>
   
