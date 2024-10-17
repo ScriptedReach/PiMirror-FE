@@ -1,11 +1,13 @@
 <script>
   import TimeAndDate from './components/TimeAndDate.vue';
   import Weather from './components/Weather.vue' 
+import Finance from './components/Finance.vue';
   export default {
     name: 'App',
     components:{
       TimeAndDate,
       Weather,
+      Finance,
     }
   };
   </script>
@@ -17,6 +19,7 @@
         <TimeAndDate />
       <Weather />
       </div>
+      <Finance/>
       
     </div>
   </template>
