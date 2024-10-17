@@ -1,31 +1,3 @@
-<template>
-  <div class="mt-5 text-right">
-    <!-- Temperature Display, aligned right -->
-    <div class="text-5xl flex justify-end items-center">
-      <font-awesome-icon :icon="['fas', 'temperature-three-quarters']" class="text-3xl" />
-      <div class="ml-3">{{ temperature_current !== null ? temperature_current : 'Loading...' }}</div>
-      <div class="text-3xl mt-3 ml-1">°C</div>
-    </div>
-    
-    <!-- Wind Speed Display, aligned right -->
-    <div class="flex justify-end items-center mt-2">
-      <font-awesome-icon :icon="['fas', 'wind']" class="text-xl" />
-      <div class="text-3xl ml-2">{{ wind_speed_10m !== null ? wind_speed_10m : 'N/A' }}</div>
-      <div class="text-md mt-3 ml-1">k/h</div>
-    </div>
-    
-    <!-- Precipitation Forecast -->
-    <div class="mt-10 text-xl">
-      <h3 class="text-2xl font-bold">Forecast:</h3>
-      <ul>
-        <li v-for="(day, index) in dailyPrecipitation" :key="index">
-          {{ day.day }}: {{ day.precipitation !== null ? day.precipitation : 'N/A' }} mm
-        </li>
-      </ul>
-    </div>
-  </div>
-</template>
-
 <script>
 export default {
   data() {
@@ -80,3 +52,32 @@ export default {
 <style scoped>
 /* Optional: Custom styles for further refinement */
 </style>
+
+
+<template>
+  <div class="mt-5 text-right">
+    <!-- Temperature Display, aligned right -->
+    <div class="text-5xl flex justify-end items-center">
+      <font-awesome-icon :icon="['fas', 'temperature-three-quarters']" class="text-3xl" />
+      <div class="ml-3">{{ temperature_current !== null ? temperature_current : 'Loading...' }}</div>
+      <div class="text-3xl mt-3 ml-1">°C</div>
+    </div>
+    
+    <!-- Wind Speed Display, aligned right -->
+    <div class="flex justify-end items-center mt-2">
+      <font-awesome-icon :icon="['fas', 'wind']" class="text-xl" />
+      <div class="text-3xl ml-2">{{ wind_speed_10m !== null ? wind_speed_10m : 'N/A' }}</div>
+      <div class="text-md mt-3 ml-1">k/h</div>
+    </div>
+    
+    <!-- Precipitation Forecast -->
+    <div class="mt-10 text-xl">
+      <h3 class="text-2xl font-bold">Forecast:</h3>
+      <ul>
+        <li v-for="(day, index) in dailyPrecipitation" :key="index">
+          {{ day.day }}: {{ day.precipitation !== null ? day.precipitation : 'N/A' }} mm
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
