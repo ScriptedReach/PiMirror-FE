@@ -15,24 +15,23 @@ export default {
     };
   },
   mounted() {
-  console.log("Latitude:", this.latitude, "Longitude:", this.longitude);
+    console.log("Latitude:", this.latitude, "Longitude:", this.longitude);
 
-
-  fetch(`https://api.open-meteo.com/v1/forecast?latitude=${this.latitude}&longitude=${this.longitude}&current_weather=true&daily=precipitation_sum&timezone=${this.timezone}`)
-  .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      // Access the correct data from the API response
-      this.temperature_current = data.current_weather.temperature;
-      this.wind_speed_10m = data.current_weather.windspeed;
-      this.precipitation_sum = data.daily.precipitation_sum;
-      this.time = data.daily.time;
-    })
-    .catch(error => console.error('Fetch error:', error));
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${this.latitude}&longitude=${this.longitude}&current_weather=true&daily=precipitation_sum&timezone=${this.timezone}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Access the correct data from the API response
+        this.temperature_current = data.current_weather.temperature;
+        this.wind_speed_10m = data.current_weather.windspeed;
+        this.precipitation_sum = data.daily.precipitation_sum;
+        this.time = data.daily.time;
+      })
+      .catch(error => console.error('Fetch error:', error));
   },
   computed: {
     dailyPrecipitation() {
@@ -50,18 +49,22 @@ export default {
 };
 </script>
 
+<style scoped>
+/* Optional: Custom styles for further refinement */
+</style>
+
 
 <template>
   <div class="mt-5 text-right">
-    <!-- Temperature Display -->
-    <div class="text-5xl flex flex-row items-center">
+    <!-- Temperature Display, aligned right -->
+    <div class="text-5xl flex justify-end items-center">
       <font-awesome-icon :icon="['fas', 'temperature-three-quarters']" class="text-3xl" />
       <div class="ml-3">{{ temperature_current !== null ? temperature_current : 'Loading...' }}</div>
       <div class="text-3xl mt-3 ml-1">°C</div>
     </div>
     
-    <!-- Wind Speed Display -->
-    <div class="flex items-center mt-2 ml-10">
+    <!-- Wind Speed Display, aligned right -->
+    <div class="flex justify-end items-center mt-2">
       <font-awesome-icon :icon="['fas', 'wind']" class="text-xl" />
       <div class="text-3xl ml-2">{{ wind_speed_10m !== null ? wind_speed_10m : 'N/A' }}</div>
       <div class="text-md mt-3 ml-1">k/h</div>
