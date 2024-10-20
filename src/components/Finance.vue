@@ -3,7 +3,7 @@
   <div></div>
   <div class="mt-16 text-right">
     <div class="">Bitcoin</div>
-    <hr class="h-px my-1 bg-white w-full border-0">
+    <hr class="h-px my-1 bg-white border-0 opacity-50">
     <div v-if="btcPrice">
       € {{ btcPrice }}
     </div>

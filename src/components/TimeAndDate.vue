@@ -32,9 +32,9 @@ export default {
 <template>
   <div class="flex flex-col">
     <div class="flex flex-row">
-      <div class="text-8xl">{{ currentTime }}</div>
-      <!-- <div class="text-4xl ml-2">{{ currentSeconds }}</div> -->
+      <div class="text-7xl">{{ currentTime }}</div>
     </div>
-    <div class="text-3xl">{{ dateFormat }}</div>
+    <hr class="h-px my-1 bg-white border-0 opacity-50">
+    <div class="text-2xl">{{ dateFormat }}</div>
   </div>
 </template>

@@ -13,6 +13,39 @@ export default {
       precipitation_sum: [],
       time: [],
       temperature_max: [],
+      weather_code: 51,
+
+
+      weatherDescriptions: {
+        0: 'Clear sky',
+        1: 'Mainly clear',
+        2: 'Partly cloudy',
+        3: 'Overcast',
+        45: 'Fog',
+        48: 'Depositing rime fog',
+        51: 'Drizzle: Light intensity',
+        53: 'Drizzle: Moderate intensity',
+        55: 'Drizzle: Dense intensity',
+        56: 'Freezing Drizzle: Light intensity',
+        57: 'Freezing Drizzle: Dense intensity',
+        61: 'Rain: Slight intensity',
+        63: 'Rain: Moderate intensity',
+        65: 'Rain: Heavy intensity',
+        66: 'Freezing Rain: Light intensity',
+        67: 'Freezing Rain: Heavy intensity',
+        71: 'Snow fall: Slight intensity',
+        73: 'Snow fall: Moderate intensity',
+        75: 'Snow fall: Heavy intensity',
+        77: 'Snow grains',
+        80: 'Rain showers: Slight intensity',
+        81: 'Rain showers: Moderate intensity',
+        82: 'Rain showers: Violent intensity',
+        85: 'Snow showers: Slight intensity',
+        86: 'Snow showers: Heavy intensity',
+        95: 'Thunderstorm: Slight or moderate',
+        96: 'Thunderstorm with slight hail',
+        99: 'Thunderstorm with heavy hail'
+      }
     };
   },
   mounted() {
@@ -32,6 +65,7 @@ export default {
         this.precipitation_sum = data.daily.precipitation_sum;
         this.time = data.daily.time;
         this.temperature_max = data.daily.temperature_2m_max;
+        this.weather_code = data.current_weather.weathercode;
       })
       .catch(error => console.error('Fetch error:', error));
   },
@@ -48,48 +82,64 @@ export default {
           temperature_max: this.temperature_max[index] || 'N/A',
         };
       });
+    },
+  },
+  methods: {
+    getWeatherDescription(code) {
+      return this.weatherDescriptions[code] || 'Unknown weather condition';
     }
   }
 };
 </script>
 
-<style scoped>
-/* Optional: Custom styles for further refinement */
-</style>
-
 <template>
-  <div class="mt-5 text-right">
-    <!-- Temperature Display, aligned right -->
-    <div class="text-5xl flex justify-end items-center">
-      <font-awesome-icon :icon="['fas', 'temperature-three-quarters']" class="text-3xl" />
-      <div class="ml-3">{{ temperature_current !== null ? temperature_current : 'Loading...' }}</div>
-      <div class="text-3xl mt-3 ml-1">°C</div>
-    </div>
-    
-    <!-- Wind Speed Display, aligned right -->
-    <div class="flex justify-end items-center mt-2">
-      <font-awesome-icon :icon="['fas', 'wind']" class="text-xl" />
-      <div class="text-3xl ml-2">{{ wind_speed_10m !== null ? wind_speed_10m : 'N/A' }}</div>
-      <div class="text-md mt-3 ml-1">km/h</div>
-    </div>
-    
-    <div class="mt-16 text-xl">
-  <h3 class="text-xl text-left">Forecast</h3>
-
-  <hr class="h-px my-1 bg-white border-0">
-  <div class="grid grid-cols-1">
-    <div v-for="(day, index) in dailyPrecipitation" :key="index" class="grid grid-cols-3 items-center text-sm">
-      <!-- Day Name -->
-      <div class=" text-left">{{ day.day }}</div>
-      
-      <!-- Max Temp -->
-      <div class="text-left">{{ day.temperature_max !== 'N/A' ? day.temperature_max : 'N/A' }}°C</div>
-      
-      <!-- Precipitation -->
-      <div class="text-right">{{ day.precipitation !== null ? day.precipitation : 'N/A' }} mm</div>
+  <div class="flex flex-col text-right">
+    <div class="text-white">
+  <!-- Temperature Display -->
+  <div class="flex justify-end items-center mb-4">
+    <div class="flex items-center">
+      <span class="text-5xl">{{ temperature_current !== null ? temperature_current : 'Loading...' }}</span>
+      <span class="text-4xl">°</span>
     </div>
   </div>
-</div>
+
+  <hr class="h-px my-1 bg-white border-0 opacity-50">
+
+  <!-- Weather codes with limited width and word wrap -->
+  <div class="text-xl max-w-[190px] break-words text-right mb-1">
+    {{ getWeatherDescription(weather_code) }}
+  </div>
+
+  <!-- Wind Speed Display, aligned right -->
+  <div class="flex justify-end items-center space-x-2">
+    <font-awesome-icon :icon="['fas', 'wind']" class="text-xl" />
+    <span class="text-xl">{{ wind_speed_10m !== null ? wind_speed_10m : 'N/A' }}</span>
+    <span class="text-sm mt-1">km/h</span>
+  </div>
 </div>
 
+
+    <div>
+      <div class="mt-10 text-xl">
+        <!-- Forecast Title -->
+        <h3 class="text-xl text-left">Forecast</h3>
+
+        <hr class="h-px my-1 bg-white border-0 opacity-50">
+
+        <!-- Forecast grid (fixed width, aligned right) -->
+        <div class="grid grid-cols-1 w-[180px]">
+          <div v-for="(day, index) in dailyPrecipitation" :key="index" class="grid grid-cols-3 items-center text-sm">
+            <!-- Day Name -->
+            <span class="text-left">{{ day.day }}</span>
+
+            <!-- Max Temp -->
+            <span class="text-left">{{ day.temperature_max !== 'N/A' ? day.temperature_max : 'N/A' }}°C</span>
+
+            <!-- Precipitation -->
+            <span class="text-right">{{ day.precipitation !== null ? day.precipitation : 'N/A' }} mm</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
