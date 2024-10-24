@@ -34,7 +34,7 @@ export default {
     <div class="flex flex-row">
       <div class="text-7xl">{{ currentTime }}</div>
     </div>
-    <hr class="h-px my-1 bg-white border-0 opacity-50">
-    <div class="text-2xl">{{ dateFormat }}</div>
+    <hr class="h-px my-1 min-w-[288px] bg-white border-0 opacity-50">
+    <div class="text-2xl text-gray-400">{{ dateFormat }}</div>
   </div>
 </template>

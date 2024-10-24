@@ -106,12 +106,12 @@ export default {
   <hr class="h-px my-1 bg-white border-0 opacity-50">
 
   <!-- Weather codes with limited width and word wrap -->
-  <div class="text-xl max-w-[190px] break-words text-right mb-1">
+  <div class="text-xl max-w-[190px] break-words text-right mb-1 text-gray-400">
     {{ getWeatherDescription(weather_code) }}
   </div>
 
   <!-- Wind Speed Display, aligned right -->
-  <div class="flex justify-end items-center space-x-2">
+  <div class="flex justify-end items-center space-x-2 text-gray-400">
     <font-awesome-icon :icon="['fas', 'wind']" class="text-xl" />
     <span class="text-xl">{{ wind_speed_10m !== null ? wind_speed_10m : 'N/A' }}</span>
     <span class="text-sm mt-1">km/h</span>
@@ -127,7 +127,7 @@ export default {
         <hr class="h-px my-1 bg-white border-0 opacity-50">
 
         <!-- Forecast grid (fixed width, aligned right) -->
-        <div class="grid grid-cols-1 w-[180px]">
+        <div class="grid grid-cols-1 w-[180px] text-gray-400">
           <div v-for="(day, index) in dailyPrecipitation" :key="index" class="grid grid-cols-3 items-center text-sm">
             <!-- Day Name -->
             <span class="text-left">{{ day.day }}</span>
