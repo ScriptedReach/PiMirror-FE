@@ -34,8 +34,8 @@ export default {
     this.timer = setInterval(this.updateTime, 1000); 
   },
   computed: {
-    dateFormat() {
-      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    dateFormat() { //Euro format xox
+      const monthNames = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
       const day = this.currentDate.getDate();
       const month = monthNames[this.currentDate.getMonth()];
       const year = this.currentDate.getFullYear();
@@ -48,9 +48,9 @@ export default {
 <template>
   <div class="flex flex-col">
     <div class="flex flex-row">
-      <div class="text-7xl">{{ currentTime }}</div>
+      <div class="text-time">{{ currentTime }}</div>
     </div>
-    <hr class="h-px my-1 min-w-[288px] bg-white border-0 opacity-50">
-    <div class="text-2xl text-gray-400">{{ dateFormat }}</div>
+    <hr class="h-px -mt-8 my-1 min-w-[288px] bg-white border-0 opacity-50">
+    <div class="text-4xl text-gray-400">{{ dateFormat }}</div>
   </div>
 </template>

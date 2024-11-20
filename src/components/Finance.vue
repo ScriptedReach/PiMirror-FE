@@ -1,14 +1,17 @@
 <template>
 <div class="flex flex-row justify-between">
   <div></div>
-  <div class="mt-16 text-right">
+  <div class="mt-16 text-3xl text-right">
     <div class="">Bitcoin</div>
-    <hr class="h-px my-1 bg-white border-0 opacity-50">
-    <div v-if="btcPrice">
+    <hr class="h-px my-1 bg-white border-0  opacity-50">
+    <div class="text-gray-400">
+      <div v-if="btcPrice">
       € {{ btcPrice }}
     </div>
       <p v-else>Loading...</p>
   </div>
+    </div>
+    
 </div>      
   
 </template>

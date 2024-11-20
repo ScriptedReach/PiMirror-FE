@@ -13,8 +13,8 @@ export default {
       precipitation_sum: [],
       time: [],
       temperature_max: [],
+      temperature_min: [], // Add for minimum temperature
       weather_code: 51,
-
 
       weatherDescriptions: {
         0: 'Clear sky',
@@ -51,7 +51,7 @@ export default {
   mounted() {
     console.log("Latitude:", this.latitude, "Longitude:", this.longitude);
 
-    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${this.latitude}&longitude=${this.longitude}&current_weather=true&daily=precipitation_sum,temperature_2m_max&timezone=${this.timezone}`)
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${this.latitude}&longitude=${this.longitude}&current_weather=true&daily=precipitation_sum,temperature_2m_max,temperature_2m_min&timezone=${this.timezone}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -65,6 +65,7 @@ export default {
         this.precipitation_sum = data.daily.precipitation_sum;
         this.time = data.daily.time;
         this.temperature_max = data.daily.temperature_2m_max;
+        this.temperature_min = data.daily.temperature_2m_min; // Assign minimum temperature data
         this.weather_code = data.current_weather.weathercode;
       })
       .catch(error => console.error('Fetch error:', error));
@@ -80,6 +81,7 @@ export default {
           day: dayName,
           precipitation: this.precipitation_sum[index] || 0,
           temperature_max: this.temperature_max[index] || 'N/A',
+          temperature_min: this.temperature_min[index] || 'N/A', // Include minimum temperature
         };
       });
     },
@@ -95,48 +97,54 @@ export default {
 <template>
   <div class="flex flex-col text-right">
     <div class="text-white">
-  <!-- Temperature Display -->
-  <div class="flex justify-end items-center mb-4">
-    <div class="flex items-center">
-      <span class="text-5xl">{{ temperature_current !== null ? temperature_current : 'Loading...' }}</span>
-      <span class="text-4xl">°</span>
+      <!-- Temperature Display -->
+      <div class="flex justify-end items-center mb-4">
+        <div class="flex items-center">
+          <span class="text-7xl">{{ temperature_current !== null ? temperature_current : 'Loading...' }}</span>
+          <span class="text-5xl">°</span>
+        </div>
+      </div>
+
+      <hr class="h-px my-1 bg-white border-0 opacity-50">
+
+      <!-- Weather codes with limited width and word wrap -->
+      <div class="text-3xl max-w-[590px] break-words text-right mb-1 text-gray-400">
+        {{ getWeatherDescription(weather_code) }}
+      </div>
+
+      <!-- Wind Speed Display, aligned right -->
+      <div class="flex justify-end items-center space-x-2 text-gray-400">
+        <font-awesome-icon :icon="['fas', 'wind']" class="text-2xl" />
+        <span class="text-4xl">{{ wind_speed_10m !== null ? wind_speed_10m : 'N/A' }}</span>
+        <span class="text-xl mt-3">km/h</span>
+      </div>
     </div>
-  </div>
-
-  <hr class="h-px my-1 bg-white border-0 opacity-50">
-
-  <!-- Weather codes with limited width and word wrap -->
-  <div class="text-xl max-w-[190px] break-words text-right mb-1 text-gray-400">
-    {{ getWeatherDescription(weather_code) }}
-  </div>
-
-  <!-- Wind Speed Display, aligned right -->
-  <div class="flex justify-end items-center space-x-2 text-gray-400">
-    <font-awesome-icon :icon="['fas', 'wind']" class="text-xl" />
-    <span class="text-xl">{{ wind_speed_10m !== null ? wind_speed_10m : 'N/A' }}</span>
-    <span class="text-sm mt-1">km/h</span>
-  </div>
-</div>
-
 
     <div>
-      <div class="mt-10 text-xl">
+      <div class="mt-10">
         <!-- Forecast Title -->
-        <h3 class="text-xl text-left">Forecast</h3>
+        <h3 class="text-5xl text-left">Forecast</h3>
 
         <hr class="h-px my-1 bg-white border-0 opacity-50">
 
         <!-- Forecast grid (fixed width, aligned right) -->
-        <div class="grid grid-cols-1 w-[180px] text-gray-400">
-          <div v-for="(day, index) in dailyPrecipitation" :key="index" class="grid grid-cols-3 items-center text-sm">
+        <div class="grid grid-cols-1 w-[480px] text-gray-400">
+          <div v-for="(day, index) in dailyPrecipitation" :key="index" class="grid grid-cols-4 items-center text-2xl">
             <!-- Day Name -->
             <span class="text-left">{{ day.day }}</span>
 
-            <!-- Max Temp -->
-            <span class="text-left">{{ day.temperature_max !== 'N/A' ? day.temperature_max : 'N/A' }}°C</span>
+            <!-- Max and Min Temp -->
+            <span class="text-right flex flex-col">
+              {{ day.temperature_max !== 'N/A' ? day.temperature_max : 'N/A' }}°C 
+              
+            </span>
 
+            <span class="text-right flex flex-col">
+              {{ day.temperature_min !== 'N/A' ? day.temperature_min : 'N/A' }}°C
+            </span>
+            
             <!-- Precipitation -->
-            <span class="text-right">{{ day.precipitation !== null ? day.precipitation : 'N/A' }} mm</span>
+            <span class="text-righ ml-4">{{ day.precipitation !== null ? day.precipitation : 'N/A' }} mm</span>
           </div>
         </div>
       </div>
