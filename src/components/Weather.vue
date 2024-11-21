@@ -13,7 +13,7 @@ export default {
       precipitation_sum: [],
       time: [],
       temperature_max: [],
-      temperature_min: [], // Add for minimum temperature
+      temperature_min: [], 
       weather_code: 51,
 
       weatherDescriptions: {
@@ -85,10 +85,39 @@ export default {
         };
       });
     },
+    weatherImage() {
+    const category = this.getWeatherCategory(this.weather_code); // Use weather_code
+    console.log("Category from weather line 90:", category);
+    console.log("Weather code:", this.weather_code); // Corrected variable name
+
+    switch (category) { //TODO: change image size xox
+      case '1':
+        return './src/assets/Images/Sun.png';
+      case '2':
+        return './src/assets/Images/Cloud.png';
+      case '3':
+        return './src/assets/Images/Rain.png';
+      case '4':
+        return './src/assets/Images/Snow.png';
+      case '5':
+        return './src/assets/Images/Thunder.png';
+      default:
+        console.warn("Unknown category:", category);
+        return './src/assets/Images/non.png';
+    }
+  }
   },
   methods: {
     getWeatherDescription(code) {
       return this.weatherDescriptions[code] || 'Unknown weather condition';
+    },
+    getWeatherCategory(code) { 
+      if ([0, 1].includes(code)) return '1';
+      if ([2, 3, 45, 48].includes(code)) return '2';
+      if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return '3';
+      if ([71, 73, 75, 77, 85, 86].includes(code)) return '4';
+      if ([95, 96, 99].includes(code)) return '5';
+      return '0';
     }
   }
 };
@@ -98,38 +127,39 @@ export default {
   <div class="flex flex-col text-right">
     <div class="text-white">
       <!-- Temperature Display -->
-      <div class="flex justify-end items-center mb-4">
+      <div class="flex justify-end items-center -mb-5">
+        <img class="h-[130px]" :src="weatherImage" alt="Weather Image" /> <!--TODO: Maby change this to a absolute with a left[500px] or smt may not be as responsive tho  -->
         <div class="flex items-center">
-          <span class="text-7xl">{{ temperature_current !== null ? temperature_current : 'Loading...' }}</span>
-          <span class="text-5xl">°</span>
+          <span class="text-6xl">{{ temperature_current !== null ? temperature_current : 'Loading...' }}</span>
+          <span class="text-5xl -mt-2 ml-1">°</span>
         </div>
       </div>
 
       <hr class="h-px my-1 bg-white border-0 opacity-50">
 
       <!-- Weather codes with limited width and word wrap -->
-      <div class="text-3xl max-w-[590px] break-words text-right mb-1 text-gray-400">
+      <div class="text-xl max-w-[590px] break-words text-right mb-1 text-gray-400">
         {{ getWeatherDescription(weather_code) }}
       </div>
 
       <!-- Wind Speed Display, aligned right -->
       <div class="flex justify-end items-center space-x-2 text-gray-400">
-        <font-awesome-icon :icon="['fas', 'wind']" class="text-2xl" />
-        <span class="text-4xl">{{ wind_speed_10m !== null ? wind_speed_10m : 'N/A' }}</span>
-        <span class="text-xl mt-3">km/h</span>
+        <font-awesome-icon :icon="['fas', 'wind']" class="text-xl" />
+        <span class="text-3xl">{{ wind_speed_10m !== null ? wind_speed_10m : 'N/A' }}</span>
+        <span class="text-md mt-3">km/h</span>
       </div>
     </div>
 
     <div>
       <div class="mt-10">
         <!-- Forecast Title -->
-        <h3 class="text-5xl text-left">Forecast</h3>
+        <h3 class="text-3xl text-left">Forecast</h3>
 
         <hr class="h-px my-1 bg-white border-0 opacity-50">
 
         <!-- Forecast grid (fixed width, aligned right) -->
-        <div class="grid grid-cols-1 w-[480px] text-gray-400">
-          <div v-for="(day, index) in dailyPrecipitation" :key="index" class="grid grid-cols-4 items-center text-2xl">
+        <div class="grid grid-cols-1 w-[300px] text-gray-400"> <!--TODO: maybe change width to weather code-->
+          <div v-for="(day, index) in dailyPrecipitation" :key="index" class="grid grid-cols-4 items-center text-md">
             <!-- Day Name -->
             <span class="text-left">{{ day.day }}</span>
 

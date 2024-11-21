@@ -11,7 +11,7 @@ module.exports = {
         jost: ['Jost', 'sans-serif'],
       },
       fontSize: {
-        'time': '8rem',
+        'time': '6rem',
       }
     },
   },
