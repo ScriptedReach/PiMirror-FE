@@ -14,7 +14,6 @@ export default {
       time: [],
       temperature_max: [],
       temperature_min: [], 
-      weather_code: 51,
 
       weatherDescriptions: {
         0: 'Clear sky',
@@ -48,10 +47,14 @@ export default {
       }
     };
   },
-  mounted() {
-    console.log("Latitude:", this.latitude, "Longitude:", this.longitude);
 
-    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${this.latitude}&longitude=${this.longitude}&current_weather=true&daily=precipitation_sum,temperature_2m_max,temperature_2m_min&timezone=${this.timezone}`)
+
+  mounted() {
+    // console.log("Latitude:", this.latitude, "Longitude:", this.longitude);
+
+    const fetchWeatherData = () => {
+      console.log('feched weather');
+      fetch(`https://api.open-meteo.com/v1/forecast?latitude=${this.latitude}&longitude=${this.longitude}&current_weather=true&daily=precipitation_sum,temperature_2m_max,temperature_2m_min&timezone=${this.timezone}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -59,17 +62,30 @@ export default {
         return response.json();
       })
       .then(data => {
-        // Access the correct data from the API response
         this.temperature_current = data.current_weather.temperature;
         this.wind_speed_10m = data.current_weather.windspeed;
         this.precipitation_sum = data.daily.precipitation_sum;
         this.time = data.daily.time;
         this.temperature_max = data.daily.temperature_2m_max;
-        this.temperature_min = data.daily.temperature_2m_min; // Assign minimum temperature data
+        this.temperature_min = data.daily.temperature_2m_min; 
         this.weather_code = data.current_weather.weathercode;
       })
-      .catch(error => console.error('Fetch error:', error));
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+  };
+
+  fetchWeatherData();
+
+  this.weatherInterval = setInterval(fetchWeatherData, 5000);
+  
   },
+
+  beforeDestroy() {
+
+    clearInterval(this.weatherInterval);
+  },
+    
   computed: {
     dailyPrecipitation() {
       // Map the dates and precipitation sums to day names
@@ -81,7 +97,7 @@ export default {
           day: dayName,
           precipitation: this.precipitation_sum[index] || 0,
           temperature_max: this.temperature_max[index] || 'N/A',
-          temperature_min: this.temperature_min[index] || 'N/A', // Include minimum temperature
+          temperature_min: this.temperature_min[index] || 'N/A', 
         };
       });
     },
@@ -103,7 +119,7 @@ export default {
         return './src/assets/Images/Thunder.png';
       default:
         console.warn("Unknown category:", category);
-        return './src/assets/Images/non.png';
+        return './src/assets/Images/Sun.png';
     }
   }
   },
