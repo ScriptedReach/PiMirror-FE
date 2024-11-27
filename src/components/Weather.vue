@@ -14,6 +14,7 @@ export default {
       time: [],
       temperature_max: [],
       temperature_min: [], 
+      weather_code: null,
 
       weatherDescriptions: {
         0: 'Clear sky',
@@ -102,32 +103,57 @@ export default {
       });
     },
     weatherImage() {
-    const category = this.getWeatherCategory(this.weather_code); // Use weather_code
-    console.log("Category from weather line 90:", category);
-    console.log("Weather code:", this.weather_code); // Corrected variable name
-
-    switch (category) { //TODO: change image size xox
-      case '1':
-        return './src/assets/Images/Sun.png';
-      case '2':
-        return './src/assets/Images/Cloud.png';
-      case '3':
-        return './src/assets/Images/Rain.png';
-      case '4':
-        return './src/assets/Images/Snow.png';
-      case '5':
-        return './src/assets/Images/Thunder.png';
-      default:
-        console.warn("Unknown category:", category);
-        return './src/assets/Images/Sun.png';
-    }
+  if (this.weather_code == null) {
+    return {
+      imageUrl: './src/assets/Images/Question.png',
+      styles: { width: '100px', height: '100px' },
+      className: '' // Default class name
+    };
   }
+  const category = this.getWeatherCategory(this.weather_code);
+
+  let imageUrl = './src/assets/Images/Question.png';
+  let styles = { width: '80px', height: '80px' };
+  let className = ''; 
+
+  switch (category) {
+    case '1':
+      imageUrl = './src/assets/Images/Sun.png';
+      styles = { width: '80px', height: '80px'};
+      className = 'mb-2';
+      break;
+    case '2':
+      imageUrl = './src/assets/Images/Cloud.png';
+      styles = { width: '120px', height: '120px' };
+      className = '-mb-5';
+      break;
+    case '3':
+      imageUrl = './src/assets/Images/Rain.png';
+      styles = { width: '125px', height: '125px' };
+      className = '-mb-5';
+      break;
+    case '4':
+      imageUrl = './src/assets/Images/Snow.png';
+      styles = { width: '80px', height: '80px' };
+      className = 'mb-2';
+      break;
+    case '5':
+      imageUrl = './src/assets/Images/Thunder.png';
+      styles = { width: '90px', height: '90px' };
+      className = 'mb-1';
+      break;
+  }
+
+  return { imageUrl, styles, className };
+}
   },
   methods: {
     getWeatherDescription(code) {
       return this.weatherDescriptions[code] || 'Unknown weather condition';
     },
-    getWeatherCategory(code) { 
+    getWeatherCategory(code) {
+      
+      console.log("code?" + code);
       if ([0, 1].includes(code)) return '1';
       if ([2, 3, 45, 48].includes(code)) return '2';
       if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return '3';
@@ -143,25 +169,26 @@ export default {
   <div class="flex flex-col text-right">
     <div class="text-white">
       <!-- Temperature Display -->
-      <div class="flex justify-end items-center -mb-5">
-        <img class="h-[130px]" :src="weatherImage" alt="Weather Image" /> <!--TODO: Maby change this to a absolute with a left[500px] or smt may not be as responsive tho  -->
-        <div class="flex items-center">
-          <span class="text-6xl">{{ temperature_current !== null ? temperature_current : 'Loading...' }}</span>
-          <span class="text-5xl -mt-2 ml-1">°</span>
-        </div>
-      </div>
+      <div :class="weatherImage.className" class="flex justify-end items-center">
+      <img class="mr-5" :src="weatherImage.imageUrl" :style="weatherImage.styles" alt="Weather Image" />
+      <div class="flex items-center">
+    <span class="text-6xl">{{ temperature_current !== null ? temperature_current : 'Loading...' }}</span>
+    <span class="text-5xl -mt-2 ml-1">°</span>
+  </div>
+</div>
+
 
       <hr class="h-px my-1 bg-white border-0 opacity-50">
 
       <!-- Weather codes with limited width and word wrap -->
-      <div class="text-xl max-w-[590px] break-words text-right mb-1 text-gray-400">
+      <div class="text-3xl max-w-[590px] break-words text-right mb-1 text-white">
         {{ getWeatherDescription(weather_code) }}
       </div>
 
       <!-- Wind Speed Display, aligned right -->
       <div class="flex justify-end items-center space-x-2 text-gray-400">
         <font-awesome-icon :icon="['fas', 'wind']" class="text-xl" />
-        <span class="text-3xl">{{ wind_speed_10m !== null ? wind_speed_10m : 'N/A' }}</span>
+        <span class="text-2xl">{{ wind_speed_10m !== null ? wind_speed_10m : 'N/A' }}</span>
         <span class="text-md mt-3">km/h</span>
       </div>
     </div>
@@ -174,7 +201,7 @@ export default {
         <hr class="h-px my-1 bg-white border-0 opacity-50">
 
         <!-- Forecast grid (fixed width, aligned right) -->
-        <div class="grid grid-cols-1 w-[300px] text-gray-400"> <!--TODO: maybe change width to weather code-->
+        <div class="grid grid-cols-1 w-[320px] text-gray-300"> <!--TODO: maybe change width to weather code-->
           <div v-for="(day, index) in dailyPrecipitation" :key="index" class="grid grid-cols-4 items-center text-md">
             <!-- Day Name -->
             <span class="text-left">{{ day.day }}</span>

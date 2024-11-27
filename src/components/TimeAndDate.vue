@@ -51,6 +51,6 @@ export default {
       <div class="text-time mb-4">{{ currentTime }}</div>
     </div>
     <hr class="h-px -mt-8 my-1 min-w-[288px] bg-white border-0 opacity-50">
-    <div class="text-3xl text-gray-400">{{ dateFormat }}</div>
+    <div class="text-3xl text-gray-300">{{ dateFormat }}</div>
   </div>
 </template>
