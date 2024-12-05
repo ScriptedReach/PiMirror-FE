@@ -7,6 +7,8 @@ export default {
       currentDate: new Date(), // Store the current date object
       timeFormat: import.meta.env.VITE_TIME_FORMAT || '24h',
     };
+  }, created(){
+    this.updateDate
   },
   created() {
     this.updateDate(); // Fixed: Invoking the method
@@ -62,9 +64,9 @@ export default {
 <template>
   <div class="flex flex-col">
     <div class="flex flex-row">
-      <div class="text-7xl">{{ currentTime }}</div>
+      <div class="text-time mb-4">{{ currentTime }}</div>
     </div>
-    <hr class="h-px my-1 min-w-[288px] bg-white border-0 opacity-50">
-    <div class="text-2xl text-gray-400">{{ dateFormat }}</div>
+    <hr class="h-px -mt-8 my-1 min-w-[288px] bg-white border-0 opacity-50">
+    <div class="text-3xl text-gray-300">{{ dateFormat }}</div>
   </div>
 </template>

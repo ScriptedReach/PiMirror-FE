@@ -9,6 +9,9 @@ module.exports = {
     extend: {
       fontFamily:{
         jost: ['Jost', 'sans-serif'],
+      },
+      fontSize: {
+        'time': '6rem',
       }
     },
   },
