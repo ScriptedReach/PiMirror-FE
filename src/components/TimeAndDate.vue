@@ -7,13 +7,22 @@ export default {
       currentDate: new Date(), // Store the current date object
       timeFormat: import.meta.env.VITE_TIME_FORMAT || '24h',
     };
+  }, created(){
+    this.updateDate
   },
   methods: {
-    updateTime() {
+    updateTimeAndDate() {
       const now = new Date();
       this.currentTime = this.formatTime(now);
       // this.currentSeconds = now.getSeconds(); // Update seconds
     },
+
+    updateDate() {
+      setInterval(() => {
+        this.currentDate = new Date();
+      }, 1000 * 60);
+    },
+
     formatTime(date) {
       if (this.timeFormat === '12h') {
         let hours = date.getHours();
