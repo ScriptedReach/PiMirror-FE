@@ -7,8 +7,6 @@ export default {
       currentDate: new Date(), // Store the current date object
       timeFormat: import.meta.env.VITE_TIME_FORMAT || '24h',
     };
-  }, created(){
-    this.updateDate
   },
   created() {
     this.updateDate(); // Fixed: Invoking the method
