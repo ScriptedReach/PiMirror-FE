@@ -2,24 +2,53 @@
 export default {
   data() {
     return {
-      currentTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
+      currentTime: this.formatTime(new Date()),
       currentSeconds: new Date().getSeconds(), // Initial seconds
       currentDate: new Date(), // Store the current date object
+      timeFormat: import.meta.env.VITE_TIME_FORMAT || '24h',
     };
   },
+  created() {
+    this.updateDate(); // Fixed: Invoking the method
+  },
   methods: {
-    updateTime() {
+    updateTime() { // Renamed for clarity
       const now = new Date();
-      this.currentTime = now.toLocaleTimeString();
-      // this.currentSeconds = now.getSeconds(); // Update seconds
+      this.currentTime = this.formatTime(now);
+      this.currentSeconds = now.getSeconds(); // Update seconds
     },
+
+    updateDate() {
+      setInterval(() => {
+        this.currentDate = new Date();
+      }, 1000 * 60); // Update every minute
+    },
+
+    formatTime(date) {
+      if (this.timeFormat === '12h') {
+        let hours = date.getHours();
+        const minutes = date.getMinutes();
+        const seconds = date.getSeconds();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        const strMinutes = minutes < 10 ? '0' + minutes : minutes;
+        const strSeconds = seconds < 10 ? '0' + seconds : seconds;
+        return hours + ':' + strMinutes + ':' + strSeconds + ' ' + ampm;
+      } else {
+        return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }); // 24-hour format
+      }
+    }
   },
   mounted() {
-    this.timer = setInterval(this.updateTime, 1000); 
+    this.timer = setInterval(this.updateTime, 1000); // Fixed: Renamed method
+  },
+  beforeDestroy() {
+    clearInterval(this.timer); // Cleanup to avoid memory leaks
   },
   computed: {
-    dateFormat() {
-      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    dateFormat() { // Euro format
+      const monthNames = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
       const day = this.currentDate.getDate();
       const month = monthNames[this.currentDate.getMonth()];
       const year = this.currentDate.getFullYear();
@@ -28,6 +57,7 @@ export default {
   }
 };
 </script>
+
 
 <template>
   <div class="flex flex-col">
