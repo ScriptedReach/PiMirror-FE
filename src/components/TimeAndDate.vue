@@ -2,25 +2,26 @@
 export default {
   data() {
     return {
-      currentTime: this.formatTime(new Date()), 
+      currentTime: this.formatTime(new Date()),
       currentSeconds: new Date().getSeconds(), // Initial seconds
       currentDate: new Date(), // Store the current date object
       timeFormat: import.meta.env.VITE_TIME_FORMAT || '24h',
     };
-  }, created(){
-    this.updateDate
+  },
+  created() {
+    this.updateDate(); // Fixed: Invoking the method
   },
   methods: {
-    updateTimeAndDate() {
+    updateTime() { // Renamed for clarity
       const now = new Date();
       this.currentTime = this.formatTime(now);
-      // this.currentSeconds = now.getSeconds(); // Update seconds
+      this.currentSeconds = now.getSeconds(); // Update seconds
     },
 
     updateDate() {
       setInterval(() => {
         this.currentDate = new Date();
-      }, 1000 * 60);
+      }, 1000 * 60); // Update every minute
     },
 
     formatTime(date) {
@@ -40,10 +41,13 @@ export default {
     }
   },
   mounted() {
-    this.timer = setInterval(this.updateTime, 1000); 
+    this.timer = setInterval(this.updateTime, 1000); // Fixed: Renamed method
+  },
+  beforeDestroy() {
+    clearInterval(this.timer); // Cleanup to avoid memory leaks
   },
   computed: {
-    dateFormat() { //Euro format xox
+    dateFormat() { // Euro format
       const monthNames = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
       const day = this.currentDate.getDate();
       const month = monthNames[this.currentDate.getMonth()];
@@ -53,6 +57,7 @@ export default {
   }
 };
 </script>
+
 
 <template>
   <div class="flex flex-col">
